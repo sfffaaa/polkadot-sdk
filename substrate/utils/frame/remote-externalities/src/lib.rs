@@ -527,7 +527,9 @@ where
 			}
 			if keys.len() >= Self::MAX_KEYS_PER_PREFIX {
 			    keys.truncate(Self::MAX_KEYS_PER_PREFIX);
-			    debug!(target: LOG_TARGET, "key limit reached: truncated to {Self::MAX_KEYS_PER_PREFIX}");
+				debug!(target: LOG_TARGET,
+					   "key limit reached: truncated to {}",
+					   Self::MAX_KEYS_PER_PREFIX);
 			    break;
 			}
 
