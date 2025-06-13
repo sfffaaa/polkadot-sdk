@@ -360,7 +360,7 @@ where
 	const INITIAL_BATCH_SIZE: usize = 10;
 	// nodes by default will not return more than 1000 keys per request
 	const DEFAULT_KEY_DOWNLOAD_PAGE: u32 = 1000;
-	const MAX_KEYS_PER_PREFIX = 1_000_000;
+	const MAX_KEYS_PER_PREFIX: usize = 1_000_000;
 	const MAX_RETRIES: usize = 12;
 	const KEYS_PAGE_RETRY_INTERVAL: Duration = Duration::from_secs(5);
 
@@ -525,9 +525,9 @@ where
 				log::debug!(target: LOG_TARGET, "last page received: {}", page_len);
 				break
 			}
-			if keys.len() >= MAX_KEYS_PER_PREFIX {
-			    keys.truncate(MAX_KEYS_PER_PREFIX);
-			    debug!(target: LOG_TARGET, "key limit reached: truncated to {MAX_KEYS_PER_PREFIX}");
+			if keys.len() >= Self::MAX_KEYS_PER_PREFIX {
+			    keys.truncate(Self::MAX_KEYS_PER_PREFIX);
+			    debug!(target: LOG_TARGET, "key limit reached: truncated to {Self::MAX_KEYS_PER_PREFIX}");
 			    break;
 			}
 
