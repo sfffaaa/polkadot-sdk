@@ -891,6 +891,10 @@ where
 		if amount.is_zero() || reasons.is_empty() {
 			return
 		}
+		log::error!(
+			"Extending lock {:?} for account {:?} with amount {:?} and reasons {:?}",
+			id, who, amount, reasons
+		);
 		let mut new_lock = Some(BalanceLock { id, amount, reasons: reasons.into() });
 		let mut locks = Self::locks(who)
 			.into_iter()
@@ -909,6 +913,11 @@ where
 		if let Some(lock) = new_lock {
 			locks.push(lock)
 		}
+		log::error!(
+			"Updated locks for account {:?}: {:?}",
+			who,
+			locks.iter().map(|l| (l.id, l.amount, l.reasons)).collect::<Vec<_>>()
+		);
 		Self::update_locks(who, &locks[..]);
 	}
 
