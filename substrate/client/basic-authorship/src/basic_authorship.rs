@@ -465,6 +465,22 @@ where
 
 			let block_size =
 				block_builder.estimate_block_size(self.include_proof_in_block_size_estimation);
+
+			// Log detailed block size breakdown for debugging
+			debug!(
+				target: LOG_TARGET,
+				"📊 Block size breakdown: total={}, limit={:?}, tx_size={}, header={}, extrinsics={}, proof={}, would_overflow={}",
+				block_size,
+				block_size_limit,
+				pending_tx_encoded_size,
+				block_builder.estimated_header_size,
+				block_builder.extrinsics.encoded_size(),
+				if self.include_proof_in_block_size_estimation {
+					block_builder.api.proof_recorder().map(|pr| pr.estimate_encoded_size()).unwrap_or(0)
+				} else { 0 },
+				block_size_limit.map(|limit| block_size + pending_tx_encoded_size > limit).unwrap_or(false)
+			);
+
 			if let Some(remaining_size) =
 				block_size_limit.checked_sub(block_size + pending_tx_encoded_size)
 			{
