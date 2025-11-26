@@ -469,12 +469,12 @@ where
 			// Log detailed block size breakdown for debugging
 			debug!(
 				target: LOG_TARGET,
-				"📊 Block size check: block_size={}, tx_size={}, total={}, limit={:?}, would_overflow={}",
+				"📊 Block size check: block_size={}, tx_size={}, total={}, limit={}, would_overflow={}",
 				block_size,
 				pending_tx_encoded_size,
 				block_size + pending_tx_encoded_size,
 				block_size_limit,
-				block_size_limit.map_or(false, |limit| block_size + pending_tx_encoded_size > limit)
+				block_size + pending_tx_encoded_size > block_size_limit
 			);
 
 			if let Some(remaining_size) =
